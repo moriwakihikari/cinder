@@ -1,0 +1,41 @@
+version: "3"
+services: 
+  app:
+    build: ./api
+    container_name: go
+    tty: true
+    volumes:
+      - ./api/app:/go/src/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    platform: linux/x86_64
+    image: mysql:8.0.27
+    container_name: db
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+
+  next:
+    build: ./client
+    container_name: next
+    tty: true
+    volumes:
+      - ./client/app:/app
+    ports:
+      - '3000:3000'
+    environment:
+      - WATCHPACK_POLLING=true
+    command: sh -c "npm run dev"
+
+volumes:
+  db:
+networks:
+  golang_test_network:
+    external: true

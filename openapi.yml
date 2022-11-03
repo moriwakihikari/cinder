@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info: 
+  title: Cinder REST API
+  version: 0.0.1
+tags:
+  - name: login
+    description: ログイン
+  - name: user
+    description: ユーザー
+servers: 
+  - url: https://0.0.0.0:8080
+    description: 開発環境
+security:
+  - Bearer: []
+paths:
+## ログイン
+  /login:
+    get:
+      tags: 
+        - login
+      summary: ログイン
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mail:
+                  type: string
+                  example: test@test.com
+                password:
+                  type: string
+                  example: Password(ハッシュ化)
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Login'
+        401: 
+          description: 認証エラー
+        403: 
+          description: 認可エラー
+        500:
+          description: サーバーエラー
+  ## 新規登録
+  /register:
+    get:
+      tags: 
+        - login
+      summary: 新規登録
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: テスト太郎
+                nickname:
+                  type: string
+                  example: タロウ
+                image:
+                  type: string
+                  example: パスが入るのだろうか、、、
+                mail:
+                  type: string
+                  example: tarou@test.com
+                password:
+                  type: string
+                  example: Password(ハッシュ化)
+                sex:
+                  type: integer
+                  example: 0
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Login'
+        401: 
+          description: 認証エラー
+        403: 
+          description: 認可エラー
+        500:
+          description: サーバーエラー
+
+## 異性ユーザー取得
+  /users:
+    get:
+      tags: 
+        - user
+      summary: 異性ユーザー取得
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserItem'
+        401: 
+          description: 認証エラー
+        403: 
+          description: 認可エラー
+        500:
+          description: サーバーエラー
+
+## 異性ユーザー取得
+  /users/{userId}:
+    get:
+      tags: 
+        - user
+      summary: ユーザー詳細
+      parameters:
+        - name: userId
+          in: path
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nickname:
+                    type: string
+                    example: タロウ
+                  image:
+                    type: string
+                    example: パスが入るのだろうか、、、
+                  introduction:
+                    type: string
+                    example: 自己紹介が入ります
+        401: 
+          description: 認証エラー
+        403: 
+          description: 認可エラー
+        404: 
+          description: リソース未検出エラー
+        500:
+          description: サーバーエラー
+components:
+  schemas:
+  ## ログイン
+    Login:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ユーザーID
+          example: 4a5c678e-22b3-4132-946d-74c9cc04bbe0
+        name:
+          type: string
+          description: ユーザー名
+          example: テスト太郎
+  ## ユーザーリスト
+    UserItem:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ユーザーID
+          example: 2
+        userName:
+          type: string
+          description: ユーザー名
+          example: テスト花子
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: Access token for API
