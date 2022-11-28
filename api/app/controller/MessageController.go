@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"cinder/model"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +14,11 @@ type MessageStructure struct {
 }
 
 func GetMessageAll(c* gin.Context) {
-	data := gin.H{"message": "メッセージ一覧"}
+	id, _ := strconv.Atoi(c.PostForm("id"))
+	// TODO: request[id]が渡ってこない。
+	// modelでid=1を仮で入れている 
+	fmt.Println("id:", id)
+	data, _ := model.GetMessages(id)
 	c.JSON(http.StatusOK, data)
 }
 
