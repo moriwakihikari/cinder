@@ -1,7 +1,6 @@
-import type { NextPage } from 'next'
-import Auth from "./components/Auth"
+import type { NextPage } from "next";
+import Auth from "./components/Auth";
 import Head from "next/head";
-
 
 const Home: NextPage = () => {
   return (
@@ -11,6 +10,6 @@ const Home: NextPage = () => {
       </Head>
       <Auth />
     </>
-  )
-}
-export default Home
+  );
+};
+export default Home;
