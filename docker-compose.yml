@@ -1,11 +1,13 @@
 version: "3"
-services: 
+services:
   app:
     build: ./api
     container_name: go
     tty: true
     volumes:
       - ./api/app:/go/src/app
+    ports:
+      - 8080:8080
     env_file:
       - .env
     depends_on:
@@ -20,7 +22,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - db:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/mysql_data:/var/lib/mysql
 
   next:
     build: ./client
@@ -29,7 +33,7 @@ services:
     volumes:
       - ./client/app:/app
     ports:
-      - '3000:3000'
+      - "3000:3000"
     environment:
       - WATCHPACK_POLLING=true
     command: sh -c "npm run dev"
