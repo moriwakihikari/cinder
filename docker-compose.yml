@@ -1,5 +1,5 @@
 version: "3"
-services: 
+services:
   app:
     build: ./api
     container_name: go
@@ -12,7 +12,6 @@ services:
       - .env
     depends_on:
       - db
-    command: sh -c "go run main.go"
 
   db:
     platform: linux/x86_64
@@ -34,7 +33,7 @@ services:
     volumes:
       - ./client/app:/app
     ports:
-      - '3000:3000'
+      - "3000:3000"
     environment:
       - WATCHPACK_POLLING=true
     command: sh -c "npm run dev"
