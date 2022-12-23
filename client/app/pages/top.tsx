@@ -1,9 +1,6 @@
-// import type { NextPage } from "next";
 import Dashboard from "../components/Dashboard";
-// import Head from "next/head";
-// import { useState } from "react";
 
-const url = "http://localhost:8080/users";
+const url = "http://app:8080/users";
 
 export async function getServerSideProps() {
   const json = await fetch(url).then((r) => r.json());
@@ -17,12 +14,10 @@ export async function getServerSideProps() {
 }
 
 export default function Top(data: any) {
-  console.log(data);
-
   return (
     <>
       <title>{"Top"}</title>
-      <Dashboard title="ユーザー一覧" dates={data} />
+      <Dashboard title="ユーザー一覧" data={data} />
     </>
   );
 }
