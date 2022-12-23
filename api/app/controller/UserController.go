@@ -2,6 +2,7 @@ package controller
 
 import (
 	"cinder/model"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func GetUserAll(c *gin.Context) {
+	fmt.Println("test")
 	data, _  := model.GetUsers()
 	c.JSON(http.StatusOK, data)
 }

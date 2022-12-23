@@ -200,11 +200,7 @@ export default function DashboardContent(props: any) {
                 </Paper>
               </Grid>
               {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  {/* <Orders /> */}
-                </Paper>
-              </Grid>
+              <Grid item xs={12}></Grid>
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>
