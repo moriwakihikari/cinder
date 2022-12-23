@@ -19,6 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./ListItems";
+import { Button, Card, CardActions, CardContent } from "@mui/material";
 
 // import Chart from "./Chart";
 // import Deposits from "./Deposits";
@@ -96,6 +97,7 @@ const mdTheme = createTheme();
 
 export default function DashboardContent(props: any) {
   const [open, setOpen] = React.useState(true);
+  console.log(props.data);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -183,28 +185,32 @@ export default function DashboardContent(props: any) {
                     height: 240,
                   }}
                 >
+                  {props.data.data &&
+                    props.data.data.map((data: any) => (
+                      <div>
+                        <Card sx={{ minWidth: 275, m: "2rem" }}>
+                          <CardContent>
+                            <Typography variant="h5" component="div">
+                              {data.name}
+                            </Typography>
+                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                              {data.nickname}
+                            </Typography>
+                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                              {data.mail}
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button size="small">Learn More</Button>
+                          </CardActions>
+                        </Card>
+                      </div>
+                    ))}
                   {/* <Chart /> */}
                 </Paper>
               </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  {/* <Deposits /> */}
-                </Paper>
-              </Grid>
               {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  {/* <Orders /> */}
-                </Paper>
-              </Grid>
+              <Grid item xs={12}></Grid>
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>
