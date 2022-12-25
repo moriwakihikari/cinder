@@ -10,8 +10,8 @@ import (
 )
 
 func GetUserAll(c *gin.Context) {
-	fmt.Println("test")
 	data, _  := model.GetUsers()
+	fmt.Println(http.StatusOK, data)
 	c.JSON(http.StatusOK, data)
 }
 

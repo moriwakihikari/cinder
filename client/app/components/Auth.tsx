@@ -35,7 +35,7 @@ function Copyright(props: any) {
 // const router = useRouter();
 
 function Login() {
-  router.push("/top");
+  router.push("/users");
 }
 
 const theme = createTheme();
