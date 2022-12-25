@@ -14,7 +14,7 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 export const mainListItems = (
   <React.Fragment>
-    <Link href="/top">
+    <Link href="/users">
       <ListItemButton>
         <ListItemIcon>
           <PeopleIcon />

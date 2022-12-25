@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `users`
  `residence_id`     INT,
  `age`              TINYINT NOT NULL,
  `created_at`       Datetime DEFAULT NULL,
- `updated_at`       Datetime DEFAULT NULL, 
+ `updated_at`       Datetime DEFAULT NULL,
  `deleted_at`       Datetime DEFAULT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`birthplace_id`) 

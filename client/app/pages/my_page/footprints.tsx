@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import Dashboard from "../../components/Dashboard";
+import Dashboard from "../../components/Top";
 import Head from "next/head";
 
 export default function MyPageFootprints() {
