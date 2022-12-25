@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"log"
 )
 
@@ -9,14 +10,22 @@ type User struct {
 	Name         string  `json:"name"`
 	NickName     string  `json:"nickname"`
 	Image        string  `json:"image"`
-	Introduction string  `json:"Introduction"`
+	Introduction string  `json:"introduction"`
 	Mail         string  `json:"mail"`
 	Password     string 
 	Sex          int     `json:"sex"`
+	Birthplace   string  `json:"birthplace"`
+	Residence    string  `json:"residence"`
+
 }
 
 func GetUsers() (users []User, err error) {
-	cmd := `select id, name, nickname, mail, sex from users`
+	// cmd := `select id, name, nickname, mail, sex from users`
+	cmd := `select u.id, u.name, u.nickname, u.mail, u.sex, birthplace.name, residence.name 
+			from users as u 
+			join prefectures as birthplace on u.birthplace_id = birthplace.id 
+			join prefectures as residence on u.residence_id = residence.id`
+
 	rows, err := Db.Query(cmd)
 	if err != nil {
 		log.Fatalln(err)
@@ -29,7 +38,9 @@ func GetUsers() (users []User, err error) {
 			&user.NickName,
 			&user.Mail,
 			&user.Sex,
-		)
+			&user.Birthplace,
+			&user.Residence,
+			)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -41,15 +52,22 @@ func GetUsers() (users []User, err error) {
 }
 
 func GetUser(id int) (user User, err error) {
-	cmd := `select id, name, nickname, mail, sex from users where id = ?`
-	user = User{}
+	cmd := `select u.id, u.name, u.nickname, u.mail, u.sex, birthplace.name, residence.name 
+			from users as u 
+			join prefectures as birthplace on u.birthplace_id = birthplace.id 
+			join prefectures as residence on u.residence_id = residence.id 
+			where u.id = ?`
 
+	user = User{}
 	err = Db.QueryRow(cmd, id).Scan(
 		&user.ID,
 		&user.Name,
 		&user.NickName,
 		&user.Mail,
 		&user.Sex,
+		&user.Birthplace,
+		&user.Residence,
 	)
+	fmt.Println(user, id, err)
 	return user, err
 }
