@@ -34,6 +34,9 @@ type Users = {
   name: string;
   nickname: string;
   sex: number;
+  age: number;
+  birthplace: string;
+  residence: string;
 };
 
 function Copyright(props: any) {
@@ -208,22 +211,23 @@ export default function Top(props: any) {
                     <Card sx={{ minWidth: 275, m: "2rem" }}>
                       <CardContent>
                         <Typography variant="h5" component="div">
-                          {data.name}
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
                           {data.nickname}
                         </Typography>
                         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                          {data.mail}
+                          {data.age}歳
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                          出身地：{data.birthplace}
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                          居住地：{data.residence}
                         </Typography>
                       </CardContent>
                       <CardActions>
                         {/* <Button size="small" onClick={Login}>
                           Learn More
                         </Button> */}
-                        <Link href={`/user/${data.id}`} title={data.name}>
-                          Learn More
-                        </Link>
+                        <Link href={`/user/${data.id}`}>Learn More</Link>
                       </CardActions>
                     </Card>
                   </div>
