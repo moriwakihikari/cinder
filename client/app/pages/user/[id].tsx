@@ -13,10 +13,12 @@ export async function getServerSideProps(ctx: any) {
   };
 }
 
-export default function Message(data: any) {
+export default function GetUser(data: any) {
+  console.log(data);
+
   return (
     <>
-      <title>{"syousai"}</title>
+      <title>{"ユーザー詳細"}</title>
       <UserPage data={data} />
     </>
   );
