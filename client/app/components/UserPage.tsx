@@ -21,11 +21,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./ListItems";
 import { Button, Card, CardActions, CardContent } from "@mui/material";
 import router from "next/router";
-import User from "../pages/user/[id]";
-
-// import Chart from "./Chart";
-// import Deposits from "./Deposits";
-// import Orders from "./Orders";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 function Copyright(props: any) {
   return (
@@ -95,6 +91,10 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
+function Login() {
+  router.push("/users");
+}
+
 const mdTheme = createTheme();
 
 export default function UserPage(props: any) {
@@ -103,10 +103,6 @@ export default function UserPage(props: any) {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  function Login() {
-    router.push("/");
-  }
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -193,17 +189,23 @@ export default function UserPage(props: any) {
                 height: 240,
               }}
             >
+              <IconButton onClick={Login}>
+                <>
+                  いいね！
+                  <ThumbUpAltIcon color={"secondary"} />
+                </>
+              </IconButton>
               <div>
                 <Card sx={{ minWidth: 275, m: "2rem" }}>
                   <CardContent>
                     <Typography variant="h5" component="div">
-                      {props.data.data.name}
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
                       {props.data.data.nickname}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      {props.data.data.mail}
+                      {props.data.data.age}歳
+                    </Typography>
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      {props.data.data.introduction.String}
                     </Typography>
                   </CardContent>
                   <CardActions>
