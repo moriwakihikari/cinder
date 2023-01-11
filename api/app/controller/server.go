@@ -19,7 +19,39 @@ func GetRouter() *gin.Engine {
 	//*EngineにはEndpoint、Middleware、その他Webページ用のTemplateやそこで使われるfuncMapなど様々なものを登録しておくことができます。
 
 	r := gin.Default()
-	r.Use(cors.Default())
+  r.Use(cors.Default())
+	//ここからCorsの設定
+  // r.Use(cors.New(cors.Config{
+  //   // アクセスを許可したいアクセス元
+  //   AllowOrigins: []string{
+  //       "http://next:3000",
+  //       "http://localhost:3000",
+  //   },
+  //   // アクセスを許可したいHTTPメソッド(以下の例だとPUTやDELETEはアクセスできません)
+  //   AllowMethods: []string{
+  //       "POST",
+  //       "GET",
+  //       "OPTIONS",
+  //   },
+  //   // 許可したいHTTPリクエストヘッダ
+  //   AllowHeaders: []string{
+  //       "Access-Control-Allow-Credentials",
+  //       "Access-Control-Allow-Headers",
+  //       "Access-Control-Allow-Origin",
+  //       "Access-Control-Allow-Methods",
+  //       "Content-Type",
+  //       "application/json",
+  //       "Content-Length",
+  //       "Accept-Encoding",
+  //       "Authorization",
+  //   },
+  //   // cookieなどの情報を必要とするかどうか
+  //   AllowCredentials: true,
+  //   // preflightリクエストの結果をキャッシュする時間
+  //   MaxAge: 24 * time.Hour,
+  // }))
+
+
 
   // the jwt middleware
   authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
@@ -47,12 +79,12 @@ func GetRouter() *gin.Engine {
       if err := c.ShouldBind(&loginVals); err != nil {
         return "", jwt.ErrMissingLoginValues
       }
-    userID := loginVals.Name
+    userID := loginVals.Mail
     password := loginVals.Password
 	fmt.Println(userID)
 	fmt.Println(password)
 
-	cmd := `select id, name from users where name = ? and password = ?`
+	cmd := `select id, name from users where mail = ? and password = ?`
 	
 	var user User
 
@@ -133,7 +165,6 @@ func GetRouter() *gin.Engine {
   {
     auth.GET("/hello", helloHandler)
   }
-  
 
 	// r.POST("/login", Login)
 	r.POST("/register", Register)
