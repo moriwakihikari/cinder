@@ -11,7 +11,7 @@ import (
 )
 
 type LoginStructure struct {
-	Name string `form:"username" json:"username" binding:"required"`
+	Mail string `form:"username" json:"username" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
   }
   
@@ -22,7 +22,7 @@ type LoginStructure struct {
 	user, _ := c.Get(identityKey)
 	c.JSON(200, gin.H{
 	  "userID":   claims[identityKey],
-	  "userName": user.(*User).Name,
+	  "mail": user.(*User).Name,
 	  "text":     "Hello World.",
 	})
   }
@@ -51,17 +51,17 @@ type LoginStructure struct {
 func Login(c *gin.Context) {
 	var data LoginStructure
 	c.BindJSON(&data)
-	fmt.Println(data.Name)
+	fmt.Println(data.Mail)
 	c.JSON(200, gin.H{
-		"message": data.Name,
+		"message": data.Mail,
 	})
 }
 
 func Register(c *gin.Context) {
 	var data LoginStructure
 	c.BindJSON(&data)
-	fmt.Println(data.Name)
+	fmt.Println(data.Mail)
 	c.JSON(200, gin.H{
-		"message": data.Name,
+		"message": data.Mail,
 	})
 }
