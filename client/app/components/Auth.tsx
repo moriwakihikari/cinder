@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -34,18 +34,46 @@ function Copyright(props: any) {
 }
 // const router = useRouter();
 
-function Login() {
-  router.push("/users");
-}
-
 const theme = createTheme();
 
 export default function SignInSide() {
+  const [usermail, setUsermail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  console.log(usermail);
+  console.log(password);
+
+  // const url = "http://app:8080/login";
+  const url = "http://localhost:8080/login";
+  function Login() {
+    const data = { Username: usermail, Password: password };
+    fetch(url, {
+      method: "POST", // or 'PUT'
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        if (data.code === 200) {
+          router.push("/users");
+        } else {
+          alert("ログインに失敗しました。");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
+      mail: data.get("mail"),
       password: data.get("password"),
     });
   };
@@ -96,11 +124,14 @@ export default function SignInSide() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="mail"
+                label="mail Address"
+                name="mail"
+                autoComplete="mail"
                 autoFocus
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setUsermail(e.target.value);
+                }}
               />
               <TextField
                 margin="normal"
@@ -111,6 +142,9 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setPassword(e.target.value);
+                }}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
