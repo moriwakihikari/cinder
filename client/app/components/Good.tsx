@@ -21,23 +21,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./ListItems";
 import { Button, Card, CardActions, CardContent } from "@mui/material";
 import router from "next/router";
-
-// import Chart from "./Chart";
-// import Deposits from "./Deposits";
-// import Orders from "./Orders";
-
-type Users = {
-  Introduction: string;
-  id: number;
-  image: string;
-  mail: string;
-  name: string;
-  nickname: string;
-  sex: number;
-  age: number;
-  birthplace: string;
-  residence: string;
-};
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
 function Copyright(props: any) {
   return (
@@ -107,11 +91,15 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
+function Login() {
+  router.push("/users");
+}
+
 const mdTheme = createTheme();
 
-export default function Top(props: any) {
+export default function Good(props: any) {
   const [open, setOpen] = React.useState(true);
-  console.log(props.data);
+  console.log(props);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -201,33 +189,29 @@ export default function Top(props: any) {
                 height: 240,
               }}
             >
-              {props.data.data &&
-                props.data.data.map((data: Users) => (
-                  <div key={data.id}>
-                    <Card sx={{ minWidth: 275, m: "2rem" }}>
-                      <CardContent>
-                        <Typography variant="h5" component="div">
-                          {data.nickname}
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                          {data.age}歳
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                          出身地：{data.birthplace}
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                          居住地：{data.residence}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        {/* <Button size="small" onClick={Login}>
+              <IconButton onClick={Login}>
+                <>
+                  いいね！
+                  <ThumbUpAltIcon color={"secondary"} />
+                </>
+              </IconButton>
+              <div>
+                <Card sx={{ minWidth: 275, m: "2rem" }}>
+                  <CardContent>
+                    <Typography variant="h5" component="div">
+                      {props.data.mail}
+                    </Typography>
+                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      {props.data.text}歳
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    {/* <Button size="small" onClick={Login}>
                           Learn More
                         </Button> */}
-                        <Link href={`/user/${data.id}`}>Learn More</Link>
-                      </CardActions>
-                    </Card>
-                  </div>
-                ))}
+                  </CardActions>
+                </Card>
+              </div>
               <Copyright sx={{ pt: 4 }} />
               {/* <Chart /> */}
             </Grid>

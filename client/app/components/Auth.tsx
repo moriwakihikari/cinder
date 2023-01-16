@@ -39,6 +39,8 @@ const theme = createTheme();
 export default function SignInSide() {
   const [usermail, setUsermail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  // const storedJwt = localStorage.getItem("token");
+  // const [jwt, setJwt] = useState(storedJwt || null);
 
   console.log(usermail);
   console.log(password);
@@ -59,6 +61,8 @@ export default function SignInSide() {
       .then((data) => {
         console.log("Success:", data);
         if (data.code === 200) {
+          localStorage.setItem("token", data.token);
+          // setJwt(data.token);
           router.push("/users");
         } else {
           alert("ログインに失敗しました。");
