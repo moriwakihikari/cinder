@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Router } from "@mui/icons-material";
 import router from "next/router";
+import { setCookie, destroyCookie, parseCookies } from "nookies";
 
 function Copyright(props: any) {
   return (
@@ -62,6 +63,9 @@ export default function SignInSide() {
         console.log("Success:", data);
         if (data.code === 200) {
           localStorage.setItem("token", data.token);
+          setCookie(null, "accessToken", data.token, {
+            maxAge: 30 * 24 * 60 * 60,
+          });
           // setJwt(data.token);
           router.push("/users");
         } else {

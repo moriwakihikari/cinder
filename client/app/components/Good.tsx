@@ -91,7 +91,7 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-function Login() {
+function GoodEffect() {
   router.push("/users");
 }
 
@@ -133,7 +133,7 @@ export default function Good(props: any) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              {props.title}
+              {/* {props.title} */}
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -189,7 +189,7 @@ export default function Good(props: any) {
                 height: 240,
               }}
             >
-              <IconButton onClick={Login}>
+              <IconButton onClick={GoodEffect}>
                 <>
                   いいね！
                   <ThumbUpAltIcon color={"secondary"} />
@@ -199,10 +199,10 @@ export default function Good(props: any) {
                 <Card sx={{ minWidth: 275, m: "2rem" }}>
                   <CardContent>
                     <Typography variant="h5" component="div">
-                      {props.data.mail}
+                      {props.data.data.mail}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      {props.data.text}歳
+                      {props.data.data.text}
                     </Typography>
                   </CardContent>
                   <CardActions>
