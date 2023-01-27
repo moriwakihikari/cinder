@@ -116,10 +116,6 @@ export default function Top(props: any) {
     setOpen(!open);
   };
 
-  function Login() {
-    router.push("/");
-  }
-
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>

@@ -76,35 +76,44 @@ func GetRouter() *gin.Engine {
       if err := c.ShouldBind(&loginVals); err != nil {
         return "", jwt.ErrMissingLoginValues
       }
-    userID := loginVals.Mail
+    mail := loginVals.Mail
     password := loginVals.Password
-	fmt.Println(userID)
-	fmt.Println(password)
+    fmt.Println(mail)
+    fmt.Println(password)
 
-	cmd := `select id, name from users where mail = ? and password = ?`
-	
-	var user User
+    cmd := `SELECT id, name FROM users WHERE mail = ? and password = ?`
+    
+    var user User
 
-	err := Db.QueryRow(cmd, userID, password).Scan(
-	&user.ID,
-	&user.Name,
-	)
-	fmt.Println(user)
-	fmt.Println(err)
+    err := Db.QueryRow(cmd, mail, password).Scan(
+    &user.ID,
+    &user.Name,
+    )
+    fmt.Println(user)
+    fmt.Println(err)
 
-	// fmt.Println(err)
-	if err == nil {
-		return &User{
-			Name:  userID,
-			ID:  userID,
-		  },
-		  nil
-	}
-
-      return nil, jwt.ErrFailedAuthentication
+    // fmt.Println(err)
+    if err == nil {
+      return &User{
+        Name: mail,
+        },
+        nil
+    }
+    return nil, jwt.ErrFailedAuthentication
     },
     Authorizator: func(data interface{}, c *gin.Context) bool {
-      if v, ok := data.(*User); ok && v.Name == "" {
+      // fmt.Printf("%#v\n", c)
+      fmt.Printf("%#v\n", data.(*User).Name)
+      
+      var mail string
+      cmd := `SELECT mail FROM users WHERE mail = ? LIMIT 1`
+      err := Db.QueryRow(cmd, data.(*User).Name).Scan(&mail)
+      if err != nil {
+        log.Fatal(err)
+      }
+      fmt.Printf("%#v\n", mail)
+
+      if v, ok := data.(*User); ok && v.Name == mail {
         return true
       }
 
