@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
-import Good from "../components/Good";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { NextPageContext } from "next";
+import { Layout } from "../layout/Layout";
+import Typography from "@mui/material/Typography";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import { Button, Card, CardActions, CardContent } from "@mui/material";
+import router from "next/router";
 
 export async function getServerSideProps(ctx?: NextPageContext) {
   // const url = "http://localhost:8080/auth/hello";
   const url = "http://app:8080/auth/hello";
   const cookie = parseCookies(ctx);
-  const cookie2 = `Bearer ${cookie.accessToken}`;
-  console.log(cookie2);
+  const useCookie = `Bearer ${cookie.accessToken}`;
+  console.log(useCookie);
 
   const json = await fetch(url, {
     method: "GET", // or 'PUT'
     mode: "cors",
-    headers: { Authorization: cookie2 },
+    headers: { Authorization: useCookie },
   })
     .then((response) => response.json())
     // .then((data) => data)
@@ -32,59 +38,39 @@ export async function getServerSideProps(ctx?: NextPageContext) {
   return {
     props: {
       data: data ? data : "",
-      // data: cookie2,
     },
   };
 }
 
-export default function GetGood(data: any) {
-  // const [data, setdata] = useState<any>();
-
-  // const getTodosData = async () => {
-  //   await fetch(url, {
-  //     method: "GET", // or 'PUT'
-  //     mode: "cors",
-  //     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => setdata(data))
-  //     // .then((res) => {
-  //     //   setTodos(res)
-  //     //   console.error(res);
-  //     // })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   getTodosData();
-  // }, []);
-  console.log(data);
-
-  // useEffect(() => {
-  //   // Perform localStorage action
-  //   const token = async () => {
-  //     localStorage.getItem("token");
-  //     console.log(token);
-  //     const data = await fetch(url, {
-  //       method: "GET", // or 'PUT'
-  //       mode: "cors",
-  //       headers: {
-  //         authorization: `Bearer ${token}`,
-  //       },
-  //     }).then((r) => r.json());
-  //   };
-  // }, []);
+export default function GetGood(props: any) {
+  function GoodEffect() {
+    router.push("/users");
+  }
+  console.log(props);
   return (
-    <>
+    <div>
       <title>{"Good"}</title>
-      {/* <Good /> */}
-
-      <Good data={data} />
-
-      {/* {data && <div>{data.mail}</div>}
-      {data && <div>{data.text}</div>} */}
-    </>
+      <Layout>
+        <IconButton onClick={GoodEffect}>
+          <>
+            いいね！
+            <ThumbUpAltIcon color={"secondary"} />
+          </>
+        </IconButton>
+        <div>
+          <Card sx={{ minWidth: 275, m: "2rem" }}>
+            <CardContent>
+              <Typography variant="h5" component="div">
+                {props.data.mail}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                {props.data.text}
+              </Typography>
+            </CardContent>
+            <CardActions></CardActions>
+          </Card>
+        </div>{" "}
+      </Layout>{" "}
+    </div>
   );
 }
