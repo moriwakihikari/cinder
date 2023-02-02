@@ -49,7 +49,6 @@ func GetRouter() *gin.Engine {
   }))
 
 
-
   // the jwt middleware
   authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
     Realm:       "test zone",
@@ -103,7 +102,7 @@ func GetRouter() *gin.Engine {
     },
     Authorizator: func(data interface{}, c *gin.Context) bool {
       // fmt.Printf("%#v\n", c)
-      fmt.Printf("%#v\n", data.(*User).Name)
+      // fmt.Printf("%#v\n", data.(*User).Name)
       
       var mail string
       cmd := `SELECT mail FROM users WHERE mail = ? LIMIT 1`
@@ -111,7 +110,7 @@ func GetRouter() *gin.Engine {
       if err != nil {
         log.Fatal(err)
       }
-      fmt.Printf("%#v\n", mail)
+      // fmt.Printf("%#v\n", mail)
 
       if v, ok := data.(*User); ok && v.Name == mail {
         return true

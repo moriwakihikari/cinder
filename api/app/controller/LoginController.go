@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"cinder/model"
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -14,26 +16,37 @@ type LoginStructure struct {
 	Mail string `form:"username" json:"username" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
   }
-  
-  var identityKey = "id"
-  
-  func helloHandler(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
-	user, _ := c.Get(identityKey)
-	c.JSON(200, gin.H{
-	  "userID":   claims[identityKey],
-	  "mail": user.(*User).Name,
-	  "text":     "Hello World.",
-	})
-  }
-  
-  // User demo
-  type User struct {
+
+// User demo
+type User struct {
 	ID  string
 	Name string
-  }
+}
 
-  func init() {
+var identityKey = "id"
+  
+// func helloHandler(c *gin.Context) {
+// 	claims := jwt.ExtractClaims(c)
+// 	user, _ := c.Get(identityKey)
+// 	fmt.Println(user)
+// 	c.JSON(200, gin.H{
+// 		"userID":   claims[identityKey],
+// 		"mail": user.(*User).Name,
+// 		"text":     "Hello World.",
+// 	})
+// }
+
+func helloHandler(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	fmt.Println(claims)
+	user, _ := c.Get(identityKey)
+	data, _  := model.GetMyPage(user.(*User).Name)
+	fmt.Println(http.StatusOK, data)
+	c.JSON(http.StatusOK, data)
+}
+
+
+func init() {
 	user := os.Getenv("MYSQL_USER")
 	pw := os.Getenv("MYSQL_PASSWORD")
 	db_name := os.Getenv("MYSQL_DATABASE")
@@ -43,7 +56,6 @@ type LoginStructure struct {
 		log.Fatal("Db open error:", err.Error())
 	}
 	// checkConnect(100)
-
 	fmt.Println("db connected!!")
 }
 
