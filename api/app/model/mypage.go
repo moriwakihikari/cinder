@@ -13,30 +13,34 @@ type MyPage struct {
 	Mail         string  `json:"mail"`
 	Sex          int     `json:"sex"`
 	Age          int     `json:"age"`
+	BirthplaceID int  	 `json:"birthplace_id"`
 	Birthplace   string  `json:"birthplace"`
+	ResidenceID  int  	 `json:"residence_id"`
 	Residence    string  `json:"residence"`
 }
 
-func GetMyPage(mail string) (user User, err error) {
+func GetMyPage(mail string) (mypage MyPage, err error) {
 	fmt.Println(mail)
 
-	cmd := `select u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, birthplace.name, residence.name 
+	cmd := `select u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, u.birthplace_id, birthplace.name, u.residence_id, residence.name 
 			from users as u 
 			join prefectures as birthplace on u.birthplace_id = birthplace.id 
 			join prefectures as residence on u.residence_id = residence.id 
 			where u.mail = ?`
 
-	user = User{}
+	mypage = MyPage{}
 	err = Db.QueryRow(cmd, mail).Scan(
-		&user.Name,
-		&user.NickName,
-		&user.Introduction,
-		&user.Mail,
-		&user.Sex,
-		&user.Age,
-		&user.Birthplace,
-		&user.Residence,
+		&mypage.Name,
+		&mypage.NickName,
+		&mypage.Introduction,
+		&mypage.Mail,
+		&mypage.Sex,
+		&mypage.Age,
+		&mypage.BirthplaceID,
+		&mypage.Birthplace,
+		&mypage.ResidenceID,
+		&mypage.Residence,
 	)
-	fmt.Println(user, mail, err)
-	return user, err
+	fmt.Println(mypage, mail, err)
+	return mypage, err
 }

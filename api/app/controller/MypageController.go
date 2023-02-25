@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"cinder/model"
 	"fmt"
 	"net/http"
 
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +14,11 @@ type MypageStructure struct {
 }
 
 func GetMypage(c *gin.Context) {
-	data := gin.H{"message": "マイページ"}
+	claims := jwt.ExtractClaims(c)
+	fmt.Println(claims)
+	user, _ := c.Get(identityKey)
+	data, _  := model.GetMyPage(user.(*User).Email)
+	fmt.Println(http.StatusOK, data)
 	c.JSON(http.StatusOK, data)
 }
 
