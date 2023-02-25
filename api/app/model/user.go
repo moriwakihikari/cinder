@@ -1,39 +1,38 @@
 package model
 
 import (
-	"database/sql"
+	"cinder/domain/model"
 	"fmt"
 	"log"
 )
 
-type User struct {
-	ID           int     `json:"id" binding:"required"`
-	Name         string  `json:"name"`
-	NickName     string  `json:"nickname"`
-	Image        string  `json:"image"`
-	Introduction sql.NullString  `json:"introduction"`
-	Mail         string  `json:"mail"`
-	Password     string 
-	Sex          int     `json:"sex"`
-	Age          int     `json:"age"`
-	Birthplace   string  `json:"birthplace"`
-	Residence    string  `json:"residence"`
+/*
+* 異性の全ユーザーを返却する
+*
+* @param string ログインユーザーのメールアドレス
+* @return array 異性の全ユーザー
+ */
+func GetUsers(mail string) (users []model.User, err error) {
+	// ログインユーザーの性別を取得
+	sex := `select u.sex from users as u where u.mail = ?`
+	opposite_sex := 0
+	err = Db.QueryRow(sex, mail).Scan(&opposite_sex)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-}
-
-func GetUsers() (users []User, err error) {
-	// cmd := `select id, name, nickname, mail, sex from users`
+	// ログインユーザーと性別が違う全ユーザーを取得
 	cmd := `select u.id, u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, birthplace.name, residence.name 
-			from users as u 
+			from users as u
 			join prefectures as birthplace on u.birthplace_id = birthplace.id 
-			join prefectures as residence on u.residence_id = residence.id`
-
-	rows, err := Db.Query(cmd)
+			join prefectures as residence on u.residence_id = residence.id
+			where u.sex != ?`
+	rows, err := Db.Query(cmd, opposite_sex)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	for rows.Next() {
-		var user User
+		var user model.User
 		err = rows.Scan(
 			&user.ID,
 			&user.Name,
@@ -55,14 +54,20 @@ func GetUsers() (users []User, err error) {
 	return users, err
 }
 
-func GetUser(id int) (user User, err error) {
+/*
+* 特定のユーザーを返却する（ユーザー詳細画面）
+*
+* @param int ログインユーザーのid
+* @return array 特定のユーザー
+*/
+func GetUser(id int) (user model.User, err error) {
 	cmd := `select u.id, u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, birthplace.name, residence.name 
 			from users as u 
 			join prefectures as birthplace on u.birthplace_id = birthplace.id 
 			join prefectures as residence on u.residence_id = residence.id 
 			where u.id = ?`
 
-	user = User{}
+	user = model.User{}
 	err = Db.QueryRow(cmd, id).Scan(
 		&user.ID,
 		&user.Name,
