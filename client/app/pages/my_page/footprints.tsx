@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
-import Dashboard from "../../components/Top";
 import Head from "next/head";
+import { Layout } from "../../layout/Layout";
 
 export default function MyPageFootprints() {
   return (
     <>
       <title>{"足跡"}</title>
-      <Dashboard title="足跡" />
+      <Layout>coming soon...</Layout>
     </>
   );
 }

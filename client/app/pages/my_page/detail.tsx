@@ -3,15 +3,12 @@ import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { NextPageContext } from "next";
 import { Layout } from "../../layout/Layout";
 import Typography from "@mui/material/Typography";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
-import { Button, Card, CardActions, CardContent } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
 import router from "next/router";
 
 export async function getServerSideProps(ctx?: NextPageContext) {
   // const url = "http://localhost:8080/auth/hello";
-  const url = "http://app:8080/auth/hello";
+  const url = "http://app:8080/auth/my_page";
   const cookie = parseCookies(ctx);
   const useCookie = `Bearer ${cookie.accessToken}`;
   console.log(useCookie);
@@ -43,6 +40,9 @@ export async function getServerSideProps(ctx?: NextPageContext) {
 }
 
 export default function GetMyPageDetail(props: any) {
+  function editPage() {
+    router.push("/my_page/edit");
+  }
   console.log(props);
   return (
     <div>
@@ -72,6 +72,20 @@ export default function GetMyPageDetail(props: any) {
             </CardContent>
             <CardActions></CardActions>
           </Card>
+        </div>
+        <div>
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="center"
+            direction="column"
+          >
+            <Grid item xs={12}>
+              <Button variant="contained" onClick={editPage}>
+                編集
+              </Button>
+            </Grid>
+          </Grid>
         </div>
       </Layout>
     </div>

@@ -59,7 +59,7 @@ func GetRouter() *gin.Engine {
     PayloadFunc: func(data interface{}) jwt.MapClaims {
       if v, ok := data.(*User); ok {
         return jwt.MapClaims{
-          identityKey: v.Name,
+          identityKey: v.Email,
         }
       }
       return jwt.MapClaims{}
@@ -67,7 +67,7 @@ func GetRouter() *gin.Engine {
     IdentityHandler: func(c *gin.Context) interface{} {
       claims := jwt.ExtractClaims(c)
       return &User{
-        Name: claims[identityKey].(string),
+        Email: claims[identityKey].(string),
       }
     },
     Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -86,7 +86,7 @@ func GetRouter() *gin.Engine {
 
     err := Db.QueryRow(cmd, mail, password).Scan(
     &user.ID,
-    &user.Name,
+    &user.Email,
     )
     fmt.Println(user)
     fmt.Println(err)
@@ -94,7 +94,7 @@ func GetRouter() *gin.Engine {
     // fmt.Println(err)
     if err == nil {
       return &User{
-        Name: mail,
+        Email: mail,
         },
         nil
     }
@@ -102,17 +102,17 @@ func GetRouter() *gin.Engine {
     },
     Authorizator: func(data interface{}, c *gin.Context) bool {
       // fmt.Printf("%#v\n", c)
-      // fmt.Printf("%#v\n", data.(*User).Name)
+      // fmt.Printf("%#v\n", data.(*User).Email)
       
       var mail string
       cmd := `SELECT mail FROM users WHERE mail = ? LIMIT 1`
-      err := Db.QueryRow(cmd, data.(*User).Name).Scan(&mail)
+      err := Db.QueryRow(cmd, data.(*User).Email).Scan(&mail)
       if err != nil {
         log.Fatal(err)
       }
       // fmt.Printf("%#v\n", mail)
 
-      if v, ok := data.(*User); ok && v.Name == mail {
+      if v, ok := data.(*User); ok && v.Email == mail {
         return true
       }
 
@@ -155,6 +155,11 @@ func GetRouter() *gin.Engine {
     log.Fatal("authMiddleware.MiddlewareInit() Error:" + errInit.Error())
   }
 
+
+
+
+
+
   r.POST("/login", authMiddleware.LoginHandler)
 
   r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
@@ -168,19 +173,20 @@ func GetRouter() *gin.Engine {
   auth.GET("/refresh_token", authMiddleware.RefreshHandler)
   auth.Use(authMiddleware.MiddlewareFunc())
   {
-    auth.GET("/hello", helloHandler)
+    // auth.GET("/hello", helloHandler)
+    auth.GET("/users", GetUserAll)
+    auth.GET("/user/:id", GetUserOne)
+    auth.GET("/my_page", GetMypage)
   }
 
 	// r.POST("/login", Login)
 	r.POST("/register", Register)
-	r.GET("/users", GetUserAll)
-	r.GET("/user/:id", GetUserOne)
+	
 	r.GET("/good", GoodUser)
 	// r.GET("/messages", GetMessageAll)
 	r.POST("/messages", GetMessageAll)
 	r.GET("/messages/:id", GetMessageOne)
 	r.POST("/message/:id", CreateMessagePost)
-	r.GET("/my_page", GetMypage)
 	r.GET("/my_page/edit", GetMypageEdit)
 	r.POST("/my_page/edit", PostMypageEdit)
 	r.POST("/footprints", PostMypageEdit)

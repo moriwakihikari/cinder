@@ -20,7 +20,7 @@ type LoginStructure struct {
 // User demo
 type User struct {
 	ID  string
-	Name string
+	Email string
 }
 
 var identityKey = "id"
@@ -39,8 +39,9 @@ var identityKey = "id"
 func helloHandler(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
+	// fmt.Printf("%v\n", c)
 	user, _ := c.Get(identityKey)
-	data, _  := model.GetMyPage(user.(*User).Name)
+	data, _  := model.GetMyPage(user.(*User).Email)
 	fmt.Println(http.StatusOK, data)
 	c.JSON(http.StatusOK, data)
 }

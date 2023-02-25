@@ -1,5 +1,5 @@
 export namespace UserType {
-  export type UserDetailType = {
+  export interface UserDetailType {
     Introduction: string;
     id: number;
     image: string;
@@ -10,9 +10,9 @@ export namespace UserType {
     age: number;
     birthplace: string;
     residence: string;
-  };
+  }
 
-  export type UsersListType = {
+  export interface UsersListType {
     user_list: [];
-  };
+  }
 }

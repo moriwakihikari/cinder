@@ -3,11 +3,23 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import { Button, Card, CardActions, CardContent } from "@mui/material";
 import { UserType } from "../domain_model/user";
+import { NextPageContext } from "next";
+import { parseCookies } from "nookies";
 
-const url = "http://app:8080/users";
+export async function getServerSideProps(ctx?: NextPageContext) {
+  const url = "http://app:8080/auth/users";
+  const cookie = parseCookies(ctx);
+  const useCookie = `Bearer ${cookie.accessToken}`;
 
-export async function getServerSideProps() {
-  const json = await fetch(url).then((r) => r.json());
+  const json = await fetch(url, {
+    method: "GET", // or 'PUT'
+    mode: "cors",
+    headers: { Authorization: useCookie },
+  })
+    .then((r) => r.json())
+    .catch((err) => {
+      console.error(err);
+    });
   const user_list = json;
   return {
     props: {
@@ -17,7 +29,7 @@ export async function getServerSideProps() {
 }
 
 export default function Users(props: UserType.UsersListType) {
-  console.log(props.user_list);
+  console.log(props);
   return (
     <div>
       <title>{"Top"}</title>
