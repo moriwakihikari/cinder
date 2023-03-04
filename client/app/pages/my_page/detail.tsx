@@ -6,6 +6,11 @@ import Typography from "@mui/material/Typography";
 import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
 import router from "next/router";
 
+/**
+ * ログインユーザーの詳細情報を取得する
+ * @param ctx cookieからjwtトークン取得
+ * @returns ログインユーザー情報と都道府県マスタ
+ */
 export async function getServerSideProps(ctx?: NextPageContext) {
   // const url = "http://localhost:8080/auth/hello";
   const url = "http://app:8080/auth/my_page";
@@ -19,11 +24,6 @@ export async function getServerSideProps(ctx?: NextPageContext) {
     headers: { Authorization: useCookie },
   })
     .then((response) => response.json())
-    // .then((data) => data)
-    // .then((res) => {
-    //   setTodos(res)
-    //   console.error(res);
-    // })
     .catch((err) => {
       console.error(err);
     });
@@ -40,10 +40,12 @@ export async function getServerSideProps(ctx?: NextPageContext) {
 }
 
 export default function GetMyPageDetail(props: any) {
+  /**
+   * 編集ページに遷移
+   */
   function editPage() {
     router.push("/my_page/edit");
   }
-  console.log(props);
   return (
     <div>
       <title>{"MyPageDetail"}</title>

@@ -13,6 +13,9 @@ type MypageStructure struct {
 	Name string
 }
 
+/**
+* ログインユーザーの情報を返す
+*/
 func GetMypage(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
@@ -22,22 +25,23 @@ func GetMypage(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
+/**
+* 都道府県マスタを返す
+*/
 func GetMypagePrefectures(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
-	user, _ := c.Get(identityKey)
-	data, _  := model.GetMypagePrefectures(user.(*User).Email)
+	data, _  := model.GetMypagePrefectures()
 	fmt.Println(data)
 	c.JSON(http.StatusOK, data)
 }
 
-
-func GetMypageEdit(c *gin.Context) {
-	data := gin.H{"message": "マイページ編集"}
-	c.JSON(http.StatusOK, data)
-}
-
+/**
+* ログインユーザーを更新する
+*/
 func PostMypageEdit(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	fmt.Println(claims)
 	var data MessageStructure
 	c.BindJSON(&data)
 	fmt.Println(data.Name)

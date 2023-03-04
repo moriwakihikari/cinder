@@ -25,7 +25,12 @@ type Prefectures struct {
 	Name         string  `json:"name"`
 }
 
-
+/**
+* ログインユーザーの情報を返却する
+*
+* @param string ログインユーザーのメールアドレス
+* @return array ログインユーザーの情報, err
+*/
 func GetMyPage(mail string) (mypage MyPage, err error) {
 	cmd := `select u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, u.birthplace_id, birthplace.name, u.residence_id, residence.name 
 			from users as u 
@@ -49,8 +54,12 @@ func GetMyPage(mail string) (mypage MyPage, err error) {
 	return mypage, err
 }
 
-func GetMypagePrefectures(mail string) (prefectures []Prefectures, err error) {
-
+/**
+* 都道府県マスタを返却する
+* 
+* @return array 都道府県マスタ, err
+*/
+func GetMypagePrefectures() (prefectures []Prefectures, err error) {
 	prefecture_cmd := `select id, name from prefectures`
 	rows, err := Db.Query(prefecture_cmd)
 	if err != nil {

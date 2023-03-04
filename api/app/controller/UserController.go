@@ -10,6 +10,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+/**
+* ログインユーザーと異性の他ユーザーを返却する
+ */
 func GetUserAll(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
@@ -19,6 +22,9 @@ func GetUserAll(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
+/**
+* ユーザー詳細
+*/
 func GetUserOne(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
