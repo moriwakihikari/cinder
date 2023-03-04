@@ -1,14 +1,11 @@
 package controller
 
 import (
-	"cinder/model"
 	"database/sql"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,17 +32,6 @@ var identityKey = "id"
 // 		"text":     "Hello World.",
 // 	})
 // }
-
-func helloHandler(c *gin.Context) {
-	claims := jwt.ExtractClaims(c)
-	fmt.Println(claims)
-	// fmt.Printf("%v\n", c)
-	user, _ := c.Get(identityKey)
-	data, _  := model.GetMyPage(user.(*User).Email)
-	fmt.Println(http.StatusOK, data)
-	c.JSON(http.StatusOK, data)
-}
-
 
 func init() {
 	user := os.Getenv("MYSQL_USER")

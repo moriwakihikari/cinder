@@ -177,6 +177,7 @@ func GetRouter() *gin.Engine {
     auth.GET("/users", GetUserAll)
     auth.GET("/user/:id", GetUserOne)
     auth.GET("/my_page", GetMypage)
+    auth.GET("/prefectures", GetMypagePrefectures)
   }
 
 	// r.POST("/login", Login)
