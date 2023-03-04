@@ -3,6 +3,7 @@ package model
 import (
 	"database/sql"
 	"fmt"
+	"log"
 )
 
 type MyPage struct {
@@ -19,9 +20,13 @@ type MyPage struct {
 	Residence    string  `json:"residence"`
 }
 
-func GetMyPage(mail string) (mypage MyPage, err error) {
-	fmt.Println(mail)
+type Prefectures struct {
+	ID           int     `json:"id"`
+	Name         string  `json:"name"`
+}
 
+
+func GetMyPage(mail string) (mypage MyPage, err error) {
 	cmd := `select u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, u.birthplace_id, birthplace.name, u.residence_id, residence.name 
 			from users as u 
 			join prefectures as birthplace on u.birthplace_id = birthplace.id 
@@ -41,6 +46,30 @@ func GetMyPage(mail string) (mypage MyPage, err error) {
 		&mypage.ResidenceID,
 		&mypage.Residence,
 	)
-	fmt.Println(mypage, mail, err)
 	return mypage, err
+}
+
+func GetMypagePrefectures(mail string) (prefectures []Prefectures, err error) {
+
+	prefecture_cmd := `select id, name from prefectures`
+	rows, err := Db.Query(prefecture_cmd)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	for rows.Next() {
+		var prefecture Prefectures
+		err = rows.Scan(
+			&prefecture.ID,
+			&prefecture.Name,
+			)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		prefectures = append(prefectures, prefecture)
+	}
+	rows.Close()
+
+	fmt.Println(prefectures, err)
+	return prefectures, err
 }

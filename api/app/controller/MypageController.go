@@ -18,9 +18,19 @@ func GetMypage(c *gin.Context) {
 	fmt.Println(claims)
 	user, _ := c.Get(identityKey)
 	data, _  := model.GetMyPage(user.(*User).Email)
-	fmt.Println(http.StatusOK, data)
+	fmt.Println(data)
 	c.JSON(http.StatusOK, data)
 }
+
+func GetMypagePrefectures(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	fmt.Println(claims)
+	user, _ := c.Get(identityKey)
+	data, _  := model.GetMypagePrefectures(user.(*User).Email)
+	fmt.Println(data)
+	c.JSON(http.StatusOK, data)
+}
+
 
 func GetMypageEdit(c *gin.Context) {
 	data := gin.H{"message": "マイページ編集"}

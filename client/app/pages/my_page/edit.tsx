@@ -17,7 +17,6 @@ export async function getServerSideProps(ctx?: NextPageContext) {
   const url = "http://app:8080/auth/my_page";
   const cookie = parseCookies(ctx);
   const useCookie = `Bearer ${cookie.accessToken}`;
-  console.log(useCookie);
 
   const json = await fetch(url, {
     method: "GET", // or 'PUT'
@@ -25,19 +24,27 @@ export async function getServerSideProps(ctx?: NextPageContext) {
     headers: { Authorization: useCookie },
   })
     .then((response) => response.json())
-    // .then((data) => data)
-    // .then((res) => {
-    //   setTodos(res)
-    //   console.error(res);
-    // })
     .catch((err) => {
       console.error(err);
     });
   const data = json;
 
+  const prefecture_url = "http://app:8080/auth/prefectures";
+  const prefecture_json = await fetch(prefecture_url, {
+    method: "GET", // or 'PUT'
+    mode: "cors",
+    headers: { Authorization: useCookie },
+  })
+    .then((response) => response.json())
+    .catch((err) => {
+      console.error(err);
+    });
+  const prefecture_data = prefecture_json;
+
   return {
     props: {
       data: data ? data : "",
+      prefecture_data: prefecture_data ? prefecture_data : "",
     },
   };
 }
@@ -47,10 +54,11 @@ export default function GetMyPageDetail(props: any) {
   const [nickName, setNickName] = useState<string>("");
   const [mail, setMail] = useState<string>("");
   const [age, setAge] = useState<string>("");
-  const [birthplace, setBirthplace] = React.useState(props.data.birthplace);
+  const [birthplace, setBirthplace] = useState<string>(props.data.birthplace);
+  const [residence, setResidence] = useState<string>(props.data.residence);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+    setBirthplace(event.target.value as string);
   };
   console.log(props);
   return (
@@ -114,7 +122,7 @@ export default function GetMyPageDetail(props: any) {
                   setAge(e.target.value);
                 }}
               />
-              <Box sx={{ minWidth: 120 }}>
+              <Box sx={{ minWidth: 120, pb: 2 }}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">
                     birthplace
@@ -123,20 +131,41 @@ export default function GetMyPageDetail(props: any) {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={birthplace}
-                    defaultValue={birthplace ? birthplace : ""}
+                    defaultValue={props.data.birthplace}
                     label="birthplace"
                     onChange={handleChange}
                   >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                    <MenuItem value={"北海道"}>北海道</MenuItem>
+                    {props.prefecture_data &&
+                      props.prefecture_data.map((data: any) => (
+                        <MenuItem key={data.id} value={data.name}>
+                          {data.name}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               </Box>
-              <Typography variant="h5" component="div">
-                {props.data.residence}
-              </Typography>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    birthplace
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={residence}
+                    defaultValue={props.data.residence}
+                    label="birthplace"
+                    onChange={handleChange}
+                  >
+                    {props.prefecture_data &&
+                      props.prefecture_data.map((data: any) => (
+                        <MenuItem key={data.id} value={data.name}>
+                          {data.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Box>
             </CardContent>
             <CardActions></CardActions>
           </Card>
