@@ -12,6 +12,9 @@ import (
 
 var Db *sql.DB
 
+/**
+* DB接続
+*/
 func init() {
 	user := os.Getenv("MYSQL_USER")
 	pw := os.Getenv("MYSQL_PASSWORD")
@@ -26,6 +29,9 @@ func init() {
 	fmt.Println("db connected!!")
 }
 
+/**
+* DB接続確認
+*/
 func checkConnect(count uint) {
 	var err error
 	if err = Db.Ping(); err != nil {

@@ -158,8 +158,9 @@ func GetRouter() *gin.Engine {
 
 
 
-
-
+  /**
+  * ルーティング
+  */
   r.POST("/login", authMiddleware.LoginHandler)
 
   r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
@@ -178,6 +179,7 @@ func GetRouter() *gin.Engine {
     auth.GET("/user/:id", GetUserOne)
     auth.GET("/my_page", GetMypage)
     auth.GET("/prefectures", GetMypagePrefectures)
+    auth.POST("/my_page/edit", PostMypageEdit)
   }
 
 	// r.POST("/login", Login)
@@ -188,8 +190,7 @@ func GetRouter() *gin.Engine {
 	r.POST("/messages", GetMessageAll)
 	r.GET("/messages/:id", GetMessageOne)
 	r.POST("/message/:id", CreateMessagePost)
-	r.GET("/my_page/edit", GetMypageEdit)
-	r.POST("/my_page/edit", PostMypageEdit)
+	// r.POST("/my_page/edit", PostMypageEdit)
 	r.POST("/footprints", PostMypageEdit)
 	return r
 }
