@@ -18,7 +18,6 @@ import React from "react";
  * @returns ログインユーザー情報と都道府県マスタ
  */
 export async function getServerSideProps(ctx?: NextPageContext) {
-  // const url = "http://localhost:8080/auth/hello";
   const url = "http://app:8080/auth/my_page";
   const cookie = parseCookies(ctx);
   const useCookie = `Bearer ${cookie.accessToken}`;
@@ -55,10 +54,14 @@ export async function getServerSideProps(ctx?: NextPageContext) {
 }
 
 export default function GetMyPageDetail(props: any) {
-  const [userName, setUserName] = useState<string>("");
-  const [nickName, setNickName] = useState<string>("");
-  const [mail, setMail] = useState<string>("");
-  const [age, setAge] = useState<string>("");
+  const [userName, setUserName] = useState<string>(props.data.name);
+  const [nickName, setNickName] = useState<string>(props.data.nickname);
+  const [image, setImage] = useState<string>("none");
+  const [mail, setMail] = useState<string>(props.data.mail);
+  const [age, setAge] = useState<string>(props.data.age);
+  const [introduction, setIntroduction] = useState<string>(
+    props.data.introduction.String
+  );
   const [birthplace, setBirthplace] = useState<string>(props.data.birthplace);
   const [birthplaceId, setBirthplaceId] = useState<number>(
     props.data.birthplace_id
@@ -68,7 +71,6 @@ export default function GetMyPageDetail(props: any) {
   const [residenceId, setResidenceId] = useState<number>(
     props.data.residence_id
   );
-
   /**
    * 都道府県選択の処理
    * @param event 都道府県セレクトボックスイベント
@@ -100,23 +102,36 @@ export default function GetMyPageDetail(props: any) {
   /**
    * ユーザー情報更新
    */
-  const updateUserPost = () => {
+  const updateUserPost = async () => {
     const url = "http://localhost:8080/auth/my_page/edit";
     const cookie = parseCookies();
     const useCookie = `Bearer ${cookie.accessToken}`;
     console.log(useCookie);
-    fetch(url, {
+    console.log(props.data.id);
+    console.log(userName);
+    console.log(nickName);
+    console.log(image);
+    console.log(mail);
+    console.log(age);
+    console.log(birthplaceId);
+
+    await fetch(url, {
       method: "POST",
+      headers: { Authorization: useCookie },
       body: JSON.stringify({
-        userName: userName,
-        nickName: nickName,
-        mail: mail,
-        age: age,
-        birthplace: birthplaceId,
-        residence: residenceId,
+        ID: props.data.id,
+        Name: userName,
+        NickName: nickName,
+        Image: image,
+        Mail: mail,
+        Age: age,
+        Introduction: {
+          String: introduction,
+        },
+        Birthplace: birthplaceId,
+        Residence: residenceId,
       }),
       mode: "cors",
-      headers: { Authorization: useCookie },
     });
   };
 
@@ -180,6 +195,25 @@ export default function GetMyPageDetail(props: any) {
                 defaultValue={props.data.age ? props.data.age : ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setAge(e.target.value);
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="introduction"
+                label="introduction"
+                id="introduction"
+                multiline
+                rows={4}
+                autoComplete="introduction"
+                defaultValue={
+                  props.data.introduction.String
+                    ? props.data.introduction.String
+                    : ""
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setIntroduction(e.target.value);
                 }}
               />
               <Box sx={{ minWidth: 120, pb: 2 }}>

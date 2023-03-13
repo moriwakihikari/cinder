@@ -191,6 +191,6 @@ func GetRouter() *gin.Engine {
 	r.GET("/messages/:id", GetMessageOne)
 	r.POST("/message/:id", CreateMessagePost)
 	// r.POST("/my_page/edit", PostMypageEdit)
-	r.POST("/footprints", PostMypageEdit)
+	// r.POST("/footprints", PostMypageEdit)
 	return r
 }
