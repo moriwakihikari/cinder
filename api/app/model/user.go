@@ -1,7 +1,7 @@
 package model
 
 import (
-	"cinder/domain/model"
+	"cinder/entities"
 	"fmt"
 	"log"
 )
@@ -12,7 +12,7 @@ import (
 * @param string ログインユーザーのメールアドレス
 * @return array 異性の全ユーザー
  */
-func GetUsers(mail string) (users []model.User, err error) {
+func GetUsers(mail string) (users []entities.User, err error) {
 	// ログインユーザーの性別を取得
 	sex := `select u.sex from users as u where u.mail = ?`
 	opposite_sex := 0
@@ -32,7 +32,7 @@ func GetUsers(mail string) (users []model.User, err error) {
 		log.Fatalln(err)
 	}
 	for rows.Next() {
-		var user model.User
+		var user entities.User
 		err = rows.Scan(
 			&user.ID,
 			&user.Name,
@@ -60,14 +60,14 @@ func GetUsers(mail string) (users []model.User, err error) {
 * @param int ログインユーザーのid
 * @return array 特定のユーザー
 */
-func GetUser(id int) (user model.User, err error) {
+func GetUser(id int) (user entities.User, err error) {
 	cmd := `select u.id, u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, birthplace.name, residence.name 
 			from users as u 
 			join prefectures as birthplace on u.birthplace_id = birthplace.id 
 			join prefectures as residence on u.residence_id = residence.id 
 			where u.id = ?`
 
-	user = model.User{}
+	user = entities.User{}
 	err = Db.QueryRow(cmd, id).Scan(
 		&user.ID,
 		&user.Name,
