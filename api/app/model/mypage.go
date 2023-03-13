@@ -7,6 +7,7 @@ import (
 )
 
 type MyPage struct {
+	ID           int     `json:"id"`
 	Name         string  `json:"name"`
 	NickName     string  `json:"nickname"`
 	Image        string  `json:"image"`
@@ -32,7 +33,7 @@ type Prefectures struct {
 * @return array ログインユーザーの情報, err
 */
 func GetMyPage(mail string) (mypage MyPage, err error) {
-	cmd := `select u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, u.birthplace_id, birthplace.name, u.residence_id, residence.name 
+	cmd := `select u.id, u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, u.birthplace_id, birthplace.name, u.residence_id, residence.name 
 			from users as u 
 			join prefectures as birthplace on u.birthplace_id = birthplace.id 
 			join prefectures as residence on u.residence_id = residence.id 
@@ -40,6 +41,7 @@ func GetMyPage(mail string) (mypage MyPage, err error) {
 
 	mypage = MyPage{}
 	err = Db.QueryRow(cmd, mail).Scan(
+		&mypage.ID,
 		&mypage.Name,
 		&mypage.NickName,
 		&mypage.Introduction,
@@ -51,6 +53,8 @@ func GetMyPage(mail string) (mypage MyPage, err error) {
 		&mypage.ResidenceID,
 		&mypage.Residence,
 	)
+	fmt.Println(mypage)
+
 	return mypage, err
 }
 

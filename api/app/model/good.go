@@ -1,7 +1,7 @@
 package model
 
 import (
-	"cinder/domain/model"
+	"cinder/entities"
 	"database/sql"
 	"log"
 )
@@ -21,7 +21,7 @@ type Good struct {
 
 }
 
-func GetGoods() (users []model.User, err error) {
+func GetGoods() (users []entities.User, err error) {
 	// cmd := `select id, name, nickname, mail, sex from users`
 	cmd := `select u.id, u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, birthplace.name, residence.name 
 			from users as u 
@@ -33,17 +33,17 @@ func GetGoods() (users []model.User, err error) {
 		log.Fatalln(err)
 	}
 	for rows.Next() {
-		var user model.User
+		var user entities.User
 		err = rows.Scan(
-			&user.ID,
+			// &user.ID,
 			&user.Name,
 			&user.NickName,
-			&user.Introduction,
-			&user.Mail,
-			&user.Sex,
-			&user.Age,
-			&user.Birthplace,
-			&user.Residence,
+			// &user.Introduction,
+			// &user.Mail,
+			// &user.Sex,
+			// &user.Age,
+			// &user.Birthplace,
+			// &user.Residence,
 			)
 		if err != nil {
 			log.Fatalln(err)

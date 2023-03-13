@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"cinder/entities"
 	"cinder/model"
+
 	"fmt"
 	"net/http"
 
@@ -42,9 +44,9 @@ func GetMypagePrefectures(c *gin.Context) {
 func PostMypageEdit(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
-	var data MessageStructure
+	var data entities.PostMyPageEdit
 	c.BindJSON(&data)
-	fmt.Println(data.Name)
+	fmt.Println(data)
 	c.JSON(200, gin.H{
 		"message": data.Name,
 	})
