@@ -11,13 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type MypageStructure struct {
-	Name string
-}
-
 /**
 * ログインユーザーの情報を返す
-*/
+ */
 func GetMypage(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
@@ -33,7 +29,7 @@ func GetMypage(c *gin.Context) {
 func GetMypagePrefectures(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
-	data, _  := model.GetMypagePrefectures()
+	data, _  := model.GetMyPagePrefectures()
 	fmt.Println(data)
 	c.JSON(http.StatusOK, data)
 }
@@ -44,10 +40,13 @@ func GetMypagePrefectures(c *gin.Context) {
 func PostMypageEdit(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
-	var data entities.PostMyPageEdit
-	c.BindJSON(&data)
-	fmt.Println(data)
-	c.JSON(200, gin.H{
-		"message": data.Name,
-	})
+	var my_page entities.PostMyPageEdit
+	err := c.ShouldBindJSON(&my_page)
+	if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+	data, _ := model.UpdateMyPage(my_page)
+	fmt.Println(my_page)
+	c.JSON(http.StatusOK, data)
 }
