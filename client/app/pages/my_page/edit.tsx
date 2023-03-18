@@ -11,6 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import React from "react";
+import router from "next/router";
 
 /**
  * ログインユーザーの詳細情報を取得する
@@ -103,6 +104,7 @@ export default function GetMyPageDetail(props: any) {
    * ユーザー情報更新
    */
   const updateUserPost = async () => {
+    const ageNumber = parseInt(age, 10);
     const url = "http://localhost:8080/auth/my_page/edit";
     const cookie = parseCookies();
     const useCookie = `Bearer ${cookie.accessToken}`;
@@ -112,6 +114,7 @@ export default function GetMyPageDetail(props: any) {
     console.log(nickName);
     console.log(image);
     console.log(mail);
+    console.log(introduction);
     console.log(age);
     console.log(birthplaceId);
 
@@ -119,20 +122,32 @@ export default function GetMyPageDetail(props: any) {
       method: "POST",
       headers: { Authorization: useCookie },
       body: JSON.stringify({
-        ID: props.data.id,
-        Name: userName,
-        NickName: nickName,
-        Image: image,
-        Mail: mail,
-        Age: age,
-        Introduction: {
-          String: introduction,
+        id: props.data.id,
+        name: userName,
+        nickname: nickName,
+        image: image,
+        mail: mail,
+        age: ageNumber,
+        introduction: {
+          string: introduction,
         },
-        Birthplace: birthplaceId,
-        Residence: residenceId,
+        birthplace_id: birthplaceId,
+        Residence_id: residenceId,
       }),
       mode: "cors",
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        if (data.code) {
+          console.log("Error:", data);
+          router.push("/");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    router.push("/my_page/detail");
   };
 
   console.log(props);
