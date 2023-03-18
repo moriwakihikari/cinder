@@ -180,17 +180,16 @@ func GetRouter() *gin.Engine {
     auth.GET("/my_page", GetMypage)
     auth.GET("/prefectures", GetMypagePrefectures)
     auth.POST("/my_page/edit", PostMypageEdit)
+    // auth.POST("/my_page/edit", PostMypageEdit)
   }
 
 	// r.POST("/login", Login)
 	r.POST("/register", Register)
-	
 	r.GET("/good", GoodUser)
 	// r.GET("/messages", GetMessageAll)
 	r.POST("/messages", GetMessageAll)
 	r.GET("/messages/:id", GetMessageOne)
 	r.POST("/message/:id", CreateMessagePost)
-	// r.POST("/my_page/edit", PostMypageEdit)
 	// r.POST("/footprints", PostMypageEdit)
 	return r
 }
