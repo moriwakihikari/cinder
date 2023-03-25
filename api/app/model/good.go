@@ -7,18 +7,17 @@ import (
 )
 
 type Good struct {
-	ID           int     `json:"id" binding:"required"`
-	Name         string  `json:"name"`
-	NickName     string  `json:"nickname"`
-	Image        string  `json:"image"`
-	Introduction sql.NullString  `json:"introduction"`
-	Mail         string  `json:"mail"`
-	Password     string 
-	Sex          int     `json:"sex"`
-	Age          int     `json:"age"`
-	Birthplace   string  `json:"birthplace"`
-	Residence    string  `json:"residence"`
-
+	ID           int            `json:"id" binding:"required"`
+	Name         string         `json:"name"`
+	NickName     string         `json:"nickname"`
+	Image        string         `json:"image"`
+	Introduction sql.NullString `json:"introduction"`
+	Mail         string         `json:"mail"`
+	Password     string
+	Sex          int    `json:"sex"`
+	Age          int    `json:"age"`
+	Birthplace   string `json:"birthplace"`
+	Residence    string `json:"residence"`
 }
 
 func GetGoods() (users []entities.User, err error) {
@@ -38,13 +37,13 @@ func GetGoods() (users []entities.User, err error) {
 			// &user.ID,
 			&user.Name,
 			&user.NickName,
-			// &user.Introduction,
-			// &user.Mail,
-			// &user.Sex,
-			// &user.Age,
-			// &user.Birthplace,
-			// &user.Residence,
-			)
+		// &user.Introduction,
+		// &user.Mail,
+		// &user.Sex,
+		// &user.Age,
+		// &user.Birthplace,
+		// &user.Residence,
+		)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -55,3 +54,22 @@ func GetGoods() (users []entities.User, err error) {
 	return users, err
 }
 
+/**
+* いいねを送る処理
+*
+* @param entities.PostGood いいねに必要な構造体
+* @return array ログインユーザーの情報, err
+ */
+func PostGood(c entities.PostGood) {
+	cmd := `insert into goods (to_user_id, from_user_id) values (?, ?)`
+	stmt, err := Db.Prepare(cmd)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	_, err = stmt.Exec(c.ToUserId, c.FromUserId)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+}

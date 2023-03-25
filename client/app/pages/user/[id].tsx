@@ -6,13 +6,14 @@ import router from "next/router";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { NextPageContext } from "next";
 import { parseCookies } from "nookies";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../components/store/Auth/auth";
 
 export async function getServerSideProps(ctx: any) {
-  const queryId = String(ctx.query.id);
-  const url = "http://app:8080/auth/user/" + queryId;
+  const queryID = Number(ctx.query.id);
+  const url = "http://app:8080/auth/user/" + queryID;
   const cookie = parseCookies(ctx);
   const useCookie = `Bearer ${cookie.accessToken}`;
-
   const json = await fetch(url, {
     method: "GET", // or 'PUT'
     mode: "cors",
@@ -23,24 +24,38 @@ export async function getServerSideProps(ctx: any) {
       console.error(err);
     });
   const data = json;
-
+  // const intQueryId = parseInt(queryId, 10);
   return {
     props: {
       data: data,
+      queryID: queryID,
     },
   };
 }
 
 export default function GetUser(props: any) {
-  function Login() {
-    router.push("/users");
-  }
+  const user_id = useRecoilValue<string>(userState);
+  const PostGood = async () => {
+    const url = "http://localhost:8080/auth/good";
+    const cookie = parseCookies();
+    const useCookie = `Bearer ${cookie.accessToken}`;
+    await fetch(url, {
+      method: "POST",
+      headers: { Authorization: useCookie },
+      body: JSON.stringify({
+        to_user_id: props.queryID,
+        from_user_id: props.queryID,
+      }),
+      mode: "cors",
+    });
+  };
   console.log(props);
+  console.log(user_id);
   return (
     <div>
       <title>{"ユーザー詳細"}</title>
       <Layout>
-        <IconButton onClick={Login}>
+        <IconButton onClick={PostGood}>
           <>
             いいね！
             <ThumbUpAltIcon color={"secondary"} />

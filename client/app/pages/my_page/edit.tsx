@@ -104,20 +104,12 @@ export default function GetMyPageDetail(props: any) {
    * ユーザー情報更新
    */
   const updateUserPost = async () => {
+    // デフォルトでは文字列なのでnumberに変換する処理他の方法が良く分からないダメだと思うコード
     const ageNumber = parseInt(age, 10);
     const url = "http://localhost:8080/auth/my_page/edit";
     const cookie = parseCookies();
     const useCookie = `Bearer ${cookie.accessToken}`;
     console.log(useCookie);
-    console.log(props.data.id);
-    console.log(userName);
-    console.log(nickName);
-    console.log(image);
-    console.log(mail);
-    console.log(introduction);
-    console.log(age);
-    console.log(birthplaceId);
-
     await fetch(url, {
       method: "POST",
       headers: { Authorization: useCookie },
