@@ -40,9 +40,9 @@ func GetMyPage(mail string) (mypage entities.GetMyPageDetail, err error) {
 
 /**
 * 都道府県マスタを返却する
-* 
+*
 * @return array 都道府県マスタ, err
-*/
+ */
 func GetMyPagePrefectures() (prefectures []entities.Prefectures, err error) {
 	prefecture_cmd := `select id, name from prefectures`
 	rows, err := Db.Query(prefecture_cmd)
@@ -55,7 +55,7 @@ func GetMyPagePrefectures() (prefectures []entities.Prefectures, err error) {
 		err = rows.Scan(
 			&prefecture.ID,
 			&prefecture.Name,
-			)
+		)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -67,21 +67,27 @@ func GetMyPagePrefectures() (prefectures []entities.Prefectures, err error) {
 	return prefectures, err
 }
 
-func UpdateMyPage(c entities.PostMyPageEdit) (id int ,err error) {
+/**
+* ログインユーザーの情報を更新する
+*
+* @param entities.PostMyPageEdit ログインユーザーの更新に必要な構造体
+* @return int 更新したユーザーID, err
+ */
+func UpdateMyPage(c entities.PostMyPageEdit) (id int, err error) {
 	cmd := `UPDATE users set name = ?, nickname = ?, image = ?, introduction = ?, mail = ?, age = ?, birthplace_id = ?, residence_id = ?
 			WHERE id = ?`
 	upd, err := Db.Prepare(cmd)
 	if err != nil {
-        log.Fatal(err)
-    }
-    res, err := upd.Exec(c.Name, c.NickName, c.Image, c.Introduction.String, c.Mail, c.Age, c.BirthplaceID, c.ResidenceID, c.ID)
+		log.Fatal(err)
+	}
+	res, err := upd.Exec(c.Name, c.NickName, c.Image, c.Introduction.String, c.Mail, c.Age, c.BirthplaceID, c.ResidenceID, c.ID)
 	if err != nil {
-        panic(err.Error())
-    }
+		panic(err.Error())
+	}
 	affected, err := res.RowsAffected()
-    if err != nil {
-        panic(err.Error())
-    }
+	if err != nil {
+		panic(err.Error())
+	}
 	fmt.Printf("%d rows affected\n", affected)
 	return c.ID, err
 }
