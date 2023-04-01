@@ -175,6 +175,7 @@ func GetRouter() *gin.Engine {
 		auth.GET("/prefectures", GetMypagePrefectures)
 		auth.POST("/my_page/edit", PostMypageEdit)
 		auth.POST("/good", PostGood)
+		auth.GET("/good_check/:from_user_id/:to_user_id", GetGoodCheck)
 	}
 
 	r.POST("/register", Register)

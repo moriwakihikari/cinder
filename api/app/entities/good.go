@@ -1,6 +1,6 @@
 package entities
 
-type PostGood struct {
-	ToUserId   int `json:"to_user_id"`
+type Good struct {
 	FromUserId int `json:"from_user_id"`
+	ToUserId   int `json:"to_user_id"`
 }

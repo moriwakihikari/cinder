@@ -2,7 +2,6 @@ package model
 
 import (
 	"cinder/entities"
-	"fmt"
 	"log"
 )
 
@@ -43,7 +42,7 @@ func GetUsers(mail string) (users []entities.User, err error) {
 			&user.Age,
 			&user.Birthplace,
 			&user.Residence,
-			)
+		)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -59,7 +58,7 @@ func GetUsers(mail string) (users []entities.User, err error) {
 *
 * @param int ログインユーザーのid
 * @return array 特定のユーザー
-*/
+ */
 func GetUser(id int) (user entities.User, err error) {
 	cmd := `select u.id, u.name, u.nickname, u.introduction, u.mail, u.sex, u.age, birthplace.name, residence.name 
 			from users as u 
@@ -79,6 +78,5 @@ func GetUser(id int) (user entities.User, err error) {
 		&user.Birthplace,
 		&user.Residence,
 	)
-	fmt.Println(user, id, err)
 	return user, err
 }

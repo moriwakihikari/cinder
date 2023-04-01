@@ -60,8 +60,8 @@ func GetGoods() (users []entities.User, err error) {
 * @param entities.PostGood いいねに必要な構造体
 * @return array ログインユーザーの情報, err
  */
-func PostGood(c entities.PostGood) {
-	cmd := `insert into goods (to_user_id, from_user_id) values (?, ?)`
+func PostGood(c entities.Good) {
+	cmd := `insert into goods (from_user_id, to_user_id) values (?, ?)`
 	stmt, err := Db.Prepare(cmd)
 	if err != nil {
 		log.Fatal(err)
@@ -72,4 +72,26 @@ func PostGood(c entities.PostGood) {
 		log.Fatal(err)
 		return
 	}
+}
+
+/**
+* 既にいいねを送ったユーザーか確認する処理
+* @param entities.PostGood いいねに必要な構造体
+* @return array ログインユーザーの情報, err
+ */
+func AlreadyGoodCheck(from_user_id int, to_user_id int) (bool, error) {
+	cmd := `SELECT from_user_id, to_user_id FROM goods WHERE from_user_id = ? AND to_user_id = ?`
+	var good entities.Good
+	err := Db.QueryRow(cmd, from_user_id, to_user_id).Scan(
+		&good.ToUserId,
+		&good.FromUserId,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+		return false, err
+	}
+	isAlreadyGoodCheck := true
+	return isAlreadyGoodCheck, nil
 }
