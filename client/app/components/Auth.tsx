@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Router } from "@mui/icons-material";
 import router from "next/router";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userState } from "../components/store/Auth/auth";
 
 function Copyright(props: any) {
   return (
@@ -40,15 +42,15 @@ const theme = createTheme();
 export default function SignInSide() {
   const [usermail, setUsermail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [user, setUser] = useRecoilState(userState);
   // const storedJwt = localStorage.getItem("token");
   // const [jwt, setJwt] = useState(storedJwt || null);
 
   console.log(usermail);
   console.log(password);
 
-  // const url = "http://app:8080/login";
-  const url = "http://localhost:8080/login";
-  function Login() {
+  const Login = async () => {
+    const url = "http://localhost:8080/login";
     const data = { Username: usermail, Password: password };
     fetch(url, {
       method: "POST", // or 'PUT'
@@ -59,7 +61,7 @@ export default function SignInSide() {
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
         console.log("Success:", data);
         if (data.code === 200) {
           localStorage.setItem("token", data.token);
@@ -67,6 +69,22 @@ export default function SignInSide() {
             maxAge: 30 * 24 * 60 * 60,
           });
           // setJwt(data.token);
+          const login_get_url = "http://localhost:8080/auth/my_page";
+          const cookie = parseCookies();
+          const useCookie = `Bearer ${cookie.accessToken}`;
+          console.log(useCookie);
+          const json = await fetch(login_get_url, {
+            method: "GET",
+            headers: { Authorization: useCookie },
+            mode: "cors",
+          })
+            .then((r) => r.json())
+            .catch((err) => {
+              console.error(err);
+            });
+          const login_user = json;
+          setUser(login_user.id);
+          console.log(login_user.id);
           router.push("/users");
         } else {
           alert("ログインに失敗しました。");
@@ -75,7 +93,7 @@ export default function SignInSide() {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
