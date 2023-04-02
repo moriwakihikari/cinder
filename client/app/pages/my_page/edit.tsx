@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { NextPageContext } from "next";
+import router from "next/router";
+import { setCookie, destroyCookie, parseCookies } from "nookies";
+import { useEffect, useState } from "react";
 import { Layout } from "../../layout/Layout";
 import Typography from "@mui/material/Typography";
 import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
@@ -10,16 +11,14 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
-import React from "react";
-import router from "next/router";
 
 /**
  * ログインユーザーの詳細情報を取得する
  * @param ctx cookieからjwtトークン取得
- * @returns ログインユーザー情報と都道府県マスタ
+ * @returns ログインユーザー情報, 都道府県マスタ
  */
 export async function getServerSideProps(ctx?: NextPageContext) {
-  const url = "http://app:8080/auth/my_page";
+  const url = process.env.API_SERVER_URL + "auth/my_page";
   const cookie = parseCookies(ctx);
   const useCookie = `Bearer ${cookie.accessToken}`;
 
@@ -34,7 +33,7 @@ export async function getServerSideProps(ctx?: NextPageContext) {
     });
   const data = json;
 
-  const prefecture_url = "http://app:8080/auth/prefectures";
+  const prefecture_url = process.env.API_SERVER_URL + "auth/prefectures";
   const prefecture_json = await fetch(prefecture_url, {
     method: "GET", // or 'PUT'
     mode: "cors",
@@ -106,7 +105,7 @@ export default function GetMyPageDetail(props: any) {
   const updateUserPost = async () => {
     // デフォルトでは文字列なのでnumberに変換する処理他の方法が良く分からないダメだと思うコード
     const ageNumber = parseInt(age, 10);
-    const url = "http://localhost:8080/auth/my_page/edit";
+    const url = process.env.NEXT_PUBLIC_API_SERVER_URL + "auth/my_page/edit";
     const cookie = parseCookies();
     const useCookie = `Bearer ${cookie.accessToken}`;
     console.log(useCookie);
@@ -142,7 +141,6 @@ export default function GetMyPageDetail(props: any) {
     router.push("/my_page/detail");
   };
 
-  console.log(props);
   return (
     <div>
       <title>{"MyPageDetail"}</title>
@@ -277,7 +275,6 @@ export default function GetMyPageDetail(props: any) {
                   編集
                 </Button>
               </Grid>
-              {/* <Button variant="contained">更新する</Button> */}
             </CardContent>
             <CardActions></CardActions>
           </Card>
