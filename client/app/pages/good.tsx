@@ -1,40 +1,26 @@
-import { useEffect, useState } from "react";
-import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { NextPageContext } from "next";
-import { Layout } from "../layout/Layout";
-import Typography from "@mui/material/Typography";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
-import { Button, Card, CardActions, CardContent } from "@mui/material";
 import router from "next/router";
+import { setCookie, destroyCookie, parseCookies } from "nookies";
+import { Layout } from "../layout/Layout";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import { Button, Card, CardActions, CardContent } from "@mui/material";
 
 export async function getServerSideProps(ctx?: NextPageContext) {
-  // const url = "http://localhost:8080/auth/hello";
-  const url = "http://app:8080/auth/hello";
+  const url = process.env.API_SERVER_URL + "/auth/hello";
   const cookie = parseCookies(ctx);
   const useCookie = `Bearer ${cookie.accessToken}`;
-  console.log(useCookie);
-
   const json = await fetch(url, {
-    method: "GET", // or 'PUT'
+    method: "GET",
     mode: "cors",
     headers: { Authorization: useCookie },
   })
-    .then((response) => response.json())
-    // .then((data) => data)
-    // .then((res) => {
-    //   setTodos(res)
-    //   console.error(res);
-    // })
+    .then((r) => r.json())
     .catch((err) => {
       console.error(err);
     });
   const data = json;
-  console.log(json);
-  console.log(data);
-  console.log(`${parseCookies(ctx)}`);
-
   return {
     props: {
       data: data ? data : "",

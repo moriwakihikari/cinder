@@ -17,14 +17,14 @@ func GetUserAll(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
 	user, _ := c.Get(identityKey)
-	data, _  := model.GetUsers(user.(*User).Email)
+	data, _ := model.GetUsers(user.(*User).Email)
 	fmt.Println(http.StatusOK, data)
 	c.JSON(http.StatusOK, data)
 }
 
 /**
 * ユーザー詳細
-*/
+ */
 func GetUserOne(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	fmt.Println(claims)
