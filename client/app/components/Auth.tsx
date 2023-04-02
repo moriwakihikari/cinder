@@ -12,7 +12,6 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Router } from "@mui/icons-material";
 import router from "next/router";
 import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -43,17 +42,15 @@ export default function SignInSide() {
   const [usermail, setUsermail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [user, setUser] = useRecoilState(userState);
-  // const storedJwt = localStorage.getItem("token");
-  // const [jwt, setJwt] = useState(storedJwt || null);
 
-  console.log(usermail);
-  console.log(password);
-
+  /**
+   * Login処理
+   */
   const Login = async () => {
-    const url = "http://localhost:8080/login";
+    const url = process.env.NEXT_PUBLIC_API_SERVER_URL + "login";
     const data = { Username: usermail, Password: password };
     fetch(url, {
-      method: "POST", // or 'PUT'
+      method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
@@ -68,11 +65,10 @@ export default function SignInSide() {
           setCookie(null, "accessToken", data.token, {
             maxAge: 30 * 24 * 60 * 60,
           });
-          // setJwt(data.token);
-          const login_get_url = "http://localhost:8080/auth/my_page";
+          const login_get_url =
+            process.env.NEXT_PUBLIC_API_SERVER_URL + "auth/my_page";
           const cookie = parseCookies();
           const useCookie = `Bearer ${cookie.accessToken}`;
-          console.log(useCookie);
           const json = await fetch(login_get_url, {
             method: "GET",
             headers: { Authorization: useCookie },
@@ -84,7 +80,6 @@ export default function SignInSide() {
             });
           const login_user = json;
           setUser(login_user.id);
-          console.log(login_user.id);
           router.push("/users");
         } else {
           alert("ログインに失敗しました。");
@@ -98,10 +93,6 @@ export default function SignInSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      mail: data.get("mail"),
-      password: data.get("password"),
-    });
   };
 
   return (

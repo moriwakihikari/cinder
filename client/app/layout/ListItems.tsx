@@ -11,6 +11,8 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
+import ForumIcon from "@mui/icons-material/Forum";
 
 export const mainListItems = (
   <React.Fragment>
@@ -25,7 +27,7 @@ export const mainListItems = (
     <Link href="/messages">
       <ListItemButton>
         <ListItemIcon>
-          <BarChartIcon />
+          <ForumIcon />
         </ListItemIcon>
         <ListItemText primary="トーク" />
       </ListItemButton>
@@ -33,7 +35,7 @@ export const mainListItems = (
     <Link href="/good">
       <ListItemButton>
         <ListItemIcon>
-          <LayersIcon />
+          <ThumbUpAltIcon />
         </ListItemIcon>
         <ListItemText primary="いいね" />
       </ListItemButton>
@@ -49,7 +51,7 @@ export const secondaryListItems = (
     <Link href="/my_page/detail">
       <ListItemButton>
         <ListItemIcon>
-          <LayersIcon />
+          <InsertEmoticonIcon />
         </ListItemIcon>
         <ListItemText primary="会員情報" />
       </ListItemButton>

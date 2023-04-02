@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { NextPageContext } from "next";
+import router from "next/router";
+import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { Layout } from "../../layout/Layout";
 import Typography from "@mui/material/Typography";
 import { Button, Card, CardActions, CardContent, Grid } from "@mui/material";
-import router from "next/router";
 
 /**
  * ログインユーザーの詳細情報を取得する
@@ -12,14 +11,11 @@ import router from "next/router";
  * @returns ログインユーザー情報と都道府県マスタ
  */
 export async function getServerSideProps(ctx?: NextPageContext) {
-  // const url = "http://localhost:8080/auth/hello";
-  const url = "http://app:8080/auth/my_page";
+  const url = process.env.API_SERVER_URL + "auth/my_page";
   const cookie = parseCookies(ctx);
   const useCookie = `Bearer ${cookie.accessToken}`;
-  console.log(useCookie);
-
   const json = await fetch(url, {
-    method: "GET", // or 'PUT'
+    method: "GET",
     mode: "cors",
     headers: { Authorization: useCookie },
   })
@@ -28,10 +24,6 @@ export async function getServerSideProps(ctx?: NextPageContext) {
       console.error(err);
     });
   const data = json;
-  console.log(json);
-  console.log(data);
-  console.log(`${parseCookies(ctx)}`);
-
   return {
     props: {
       data: data ? data : "",
@@ -40,9 +32,6 @@ export async function getServerSideProps(ctx?: NextPageContext) {
 }
 
 export default function GetMyPageDetail(props: any) {
-  /**
-   * 編集ページに遷移
-   */
   function editPage() {
     router.push("/my_page/edit");
   }

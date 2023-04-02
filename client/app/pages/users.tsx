@@ -1,13 +1,22 @@
+import { NextPageContext } from "next";
+import { parseCookies } from "nookies";
+import { UserType } from "../domain_model/user";
 import { Layout } from "../layout/Layout";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import { Button, Card, CardActions, CardContent } from "@mui/material";
-import { UserType } from "../domain_model/user";
-import { NextPageContext } from "next";
-import { parseCookies } from "nookies";
 
+/**
+ * TOP画面（異性のユーザーが表示される）
+ */
+
+/**
+ * 異性のユーザー取得
+ * @param  都道府県セレクトボックスイベント
+ * @returns array 異性のユーザー
+ */
 export async function getServerSideProps(ctx?: NextPageContext) {
-  const url = "http://app:8080/auth/users";
+  const url = process.env.API_SERVER_URL + "auth/users";
   const cookie = parseCookies(ctx);
   const useCookie = `Bearer ${cookie.accessToken}`;
 
@@ -29,7 +38,6 @@ export async function getServerSideProps(ctx?: NextPageContext) {
 }
 
 export default function Users(props: UserType.UsersListType) {
-  console.log(props);
   return (
     <div>
       <title>{"Top"}</title>
@@ -59,7 +67,6 @@ export default function Users(props: UserType.UsersListType) {
             </div>
           ))}
       </Layout>
-      {/* <Top title="ユーザー一覧" data={data} /> */}
     </div>
   );
 }
