@@ -879,7 +879,7 @@
         <mxCell id="U3Y6qxCmVOaivF_U4p9_-574" value="FK: store_id" style="curved=1;startArrow=ERmandOne;startSize=10;;endArrow=ERoneToMany;endSize=10;;rounded=0;" edge="1" parent="1" source="U3Y6qxCmVOaivF_U4p9_-306" target="U3Y6qxCmVOaivF_U4p9_-468">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="U3Y6qxCmVOaivF_U4p9_-575" value="FK: store_id" style="curved=1;startArrow=ERmandOne;startSize=10;;endArrow=ERoneToMany;endSize=10;;rounded=0;" edge="1" parent="1" source="U3Y6qxCmVOaivF_U4p9_-306" target="U3Y6qxCmVOaivF_U4p9_-411">
+        <mxCell id="U3Y6qxCmVOaivF_U4p9_-575" value="FK: store_id" style="curved=1;startArrow=ERmandOne;startSize=10;;endArrow=ERoneToMany;endSize=10;;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="U3Y6qxCmVOaivF_U4p9_-306" target="U3Y6qxCmVOaivF_U4p9_-420">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2260" y="70" />
@@ -891,13 +891,12 @@
             <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="U3Y6qxCmVOaivF_U4p9_-577" value="FK: customer_id" style="curved=1;startArrow=ERmandOne;startSize=10;;endArrow=ERoneToMany;endSize=10;;rounded=0;" edge="1" parent="1" source="U3Y6qxCmVOaivF_U4p9_-356" target="U3Y6qxCmVOaivF_U4p9_-411">
+        <mxCell id="U3Y6qxCmVOaivF_U4p9_-577" value="FK: customer_id" style="curved=1;startArrow=ERmandOne;startSize=10;;endArrow=ERoneToMany;endSize=10;;rounded=0;" edge="1" parent="1" source="U3Y6qxCmVOaivF_U4p9_-356">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="2310" y="-40" />
-              <mxPoint x="2120" y="-20" />
-              <mxPoint x="2020" y="40" />
+              <mxPoint x="1980" y="-180" />
             </Array>
+            <mxPoint x="1640" y="50" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="U3Y6qxCmVOaivF_U4p9_-578" value="FK: reservation_channel_id" style="curved=1;startArrow=ERmandOne;startSize=10;;endArrow=ERoneToMany;endSize=10;;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="U3Y6qxCmVOaivF_U4p9_-392" target="U3Y6qxCmVOaivF_U4p9_-428">
